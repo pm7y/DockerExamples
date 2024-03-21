@@ -1,0 +1,90 @@
+version: "3"
+
+name: scratch-dbs
+
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-CU12-ubuntu-22.04
+    user: root
+    restart: no
+    hostname: scratch-mssql
+    shm_size: 1gb
+    environment:
+      # https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-configure-environment-variables
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD} # Set in env file
+      - MSSQL_PID=Developer # i.e. all features, but licensed for dev/test only
+      - MSSQL_AGENT_ENABLED=0
+      - MSSQL_ENABLE_HADR=0 # High Availability & Disaster Recovery
+      - MSSQL_BACKUP_DIR=/var/opt/mssql/backups
+      - MSSQL_LCID=1033 # English
+      #- MSSQL_MEMORY_LIMIT_MB=1024
+      - TZ=Etc/UTC # https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-configure-time-zone
+    ports:
+      - 14330:1433
+    volumes:
+      # You can't map to the root of the container, so we map to the subdirectories
+      - ./data/mssql/backups:/var/opt/mssql/backups
+      - ./data/mssql/data:/var/opt/mssql/data
+
+  mysql:
+    image: mysql:8.3.0
+    user: root
+    restart: no
+    hostname: scratch-mysql
+    shm_size: 1gb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - TZ=Etc/UTC
+    ports:
+      - 33060:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+  postgresql:
+    image: postgres:16.2-alpine3.19
+    user: root
+    restart: no
+    hostname: scratch-postgresql
+    shm_size: 1gb
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - TZ=Etc/UTC
+      - PGDATA=/var/lib/postgresql/data
+    ports:
+      - 54320:5432
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7.2.4-alpine3.19
+    user: root
+    restart: no
+    hostname: scratch-redis
+    shm_size: 1gb
+    environment:
+      - REDIS_PASSWORD=${DB_PASSWORD}
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+    ports:
+      - "63790:6379"
+    volumes:
+      - ./data/redis:/data
+
+  # Doesn't work
+  # redisinsights:
+  #   image: redislabs/redisinsight
+  #   user: root
+  #   restart: no
+  #   hostname: scratch-redisinsight
+  #   shm_size: 1gb
+  #   ports:
+  #     - "8081:8001"
+  #   # volumes:
+  #   #   - ./data/redisinsight:/db
+
+networks:
+  default:
+    name: scratch-dbs-net
