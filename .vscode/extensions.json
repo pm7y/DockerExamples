@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "ms-azuretools.vscode-docker",
+    "yzhang.markdown-all-in-one",
+    "esbenp.prettier-vscode"
+  ]
+}
