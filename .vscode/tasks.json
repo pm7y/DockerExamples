@@ -1,0 +1,26 @@
+{
+  // See https://go.microsoft.com/fwlink/?LinkId=733558
+  // for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "docker-compose up",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.yml up -d",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "docker-compose up (--force-recreate)",
+      "type": "shell",
+      "command": "docker-compose -f docker-compose.yml up -d --force-recreate --remove-orphans",
+      "problemMatcher": [],
+      "group": {
+        "kind": "build"
+      }
+    }
+  ]
+}
