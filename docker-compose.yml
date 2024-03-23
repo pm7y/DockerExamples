@@ -73,18 +73,6 @@ services:
     volumes:
       - ./data/redis:/data
 
-  # Doesn't work
-  # redisinsights:
-  #   image: redislabs/redisinsight
-  #   user: root
-  #   restart: no
-  #   hostname: scratch-redisinsight
-  #   shm_size: 1gb
-  #   ports:
-  #     - "8081:8001"
-  #   # volumes:
-  #   #   - ./data/redisinsight:/db
-
 networks:
   default:
     name: scratch-dbs-net
