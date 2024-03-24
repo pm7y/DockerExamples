@@ -1,0 +1,22 @@
+version: "3"
+
+name: scratch-dbs
+
+services:
+  mysql:
+    image: mysql:8.3.0
+    user: root
+    restart: no
+    hostname: scratch-mysql
+    shm_size: 1gb
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - TZ=Etc/UTC
+    ports:
+      - 33060:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+networks:
+  default:
+    name: scratch-dbs-net
