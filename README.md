@@ -38,12 +38,6 @@ After creating the container for the first time, you might want to set the follo
 /opt/mssql/bin/mssql-conf set telemetry.customerfeedback false
 ```
 
-**Don't Force Encryption**
-
-```bash
-/opt/mssql/bin/mssql-conf set network.forceencryption 0
-```
-
 **View Current Config**
 
 ```bash
@@ -59,7 +53,7 @@ docker-compose -f docker-compose-mysql.yml up -d
 ## postgresql
 
 ```ps
-docker-compose -f docker-compose-postgresql.yml up -d
+docker-compose -f docker-compose-postgres.yml up -d
 ```
 
 ## redis
@@ -68,7 +62,7 @@ docker-compose -f docker-compose-postgresql.yml up -d
 docker-compose -f docker-compose-redis.yml up -d
 ```
 
-## SonarQube
+# Sonarqube
 
 ```ps
 docker-compose -f docker-compose-sonarqube.yml up -d
@@ -86,14 +80,14 @@ docker-compose -f docker-compose-sonarqube.yml up -d
 
 - Browse to `http://localhost:9000/account/security`
 - Generate a new token
-  ![Generate Token](generate_sq_token.png)
+  ![Generate Token](./sonarqube/generate_sq_token.png)
 - Take note of the token, you won't be able to access it again
 
 **Create a project (local)**
 
 - Browse to `http://localhost:9000/projects/create?mode=manual`
 - Enter the project details, including a project key
-  ![Create Project](create_sq_project.png)
+  ![Create Project](./sonarqube/create_sq_project.png)
 
 \*\* Ensure Oracle Java jdk17 is installed
 
@@ -156,9 +150,10 @@ dotnet sonarscanner begin /k:"SeedWork" \
   /d:sonar.token="sqp_8ba66434a6f18ef1d669b12b5cb6aff8abeb93e8" \
   /d:sonar.host.url="http://localhost:9000" \
   /d:sonar.cs.roslyn.ignoreIssues=false \
-  /d:sonar.projectBaseDir=/Users/paul.mcilreavy/src/SeedWork \
-  /d:sonar.sources=. \
-  /d:sonar.exclusions=./src/api/Todo.Tests; \
+  /d:sonar.verbose="false" \
+  /d:sonar.sources=./src/api/ \
+  /d:sonar.tests=./src/api/Todo.Tests/ \
+  /d:sonar.exclusions=./src/api/Todo.Tests/; \
   dotnet build ./src/api/SeedWork.sln -c release -v quiet --nologo --no-incremental; \
   dotnet sonarscanner end /d:sonar.token="sqp_8ba66434a6f18ef1d669b12b5cb6aff8abeb93e8";
 
@@ -167,9 +162,9 @@ dotnet sonarscanner begin /k:"SeedWork" \
 
 docker run --rm \
   -e SONAR_HOST_URL="http://host.docker.internal:9000" \
-  -e SONAR_SCANNER_OPTS="-Xmx512m -Dsonar.projectKey=AzureEventGridSimulator -Dsonar.sources=. -Dsonar.exclusions='./src/AzureEventGridSimulator.Tests' -Dsonar.tests=. -Dsonar.test.inclusions='./src/AzureEventGridSimulator.Tests' -Dsonar.cs.opencover.reportsPaths='./TestResults/**/*'" \
-  -e SONAR_TOKEN="sqp_138396c79797c265d2a827589851ba0ff97f9369" \
-  -v "/Users/paul.mcilreavy/src/AzureEventGridSimulator:/usr/src" \
+  -e SONAR_SCANNER_OPTS="-Xmx512m -Dsonar.projectKey=SeedWorkFE -Dsonar.sources=./src/cra-template-seedwork" \
+  -e SONAR_TOKEN="sqp_9b6f73dd93e19422437d2e285de68f5c1cda826f" \
+  -v "/Users/paul.mcilreavy/src/SeedWork:/usr/src" \
   sonarsource/sonar-scanner-cli:latest
 
 
@@ -230,3 +225,20 @@ export PATH="$PATH:/Users/paul.mcilreavy/.dotnet/tools"
 EOF
 
 dotnet tool install --global dotnet-sonarscanner
+
+# podman
+
+brew install podman-desktop
+podman version
+
+brew install podman # needed?
+
+podman machine init
+podman machine start
+podman info
+
+https://podman-desktop.io/docs/compose/setting-up-compose
+https://github.com/containers/podman-desktop/issues/5334
+
+docker-compose version
+podman compose version

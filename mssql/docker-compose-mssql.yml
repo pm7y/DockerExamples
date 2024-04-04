@@ -1,0 +1,27 @@
+name: scratch-mssql
+
+services:
+  mssql:
+    # https://hub.docker.com/_/microsoft-mssql-server
+    image: mcr.microsoft.com/mssql/server:2022-CU12-ubuntu-22.04
+    restart: no
+    hostname: scratch-mssql
+    environment:
+      # https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-configure-environment-variables
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=${DB_PASSWORD} # Set in env file
+      - MSSQL_PID=Developer # i.e. all features, but licensed for dev/test only
+      - MSSQL_BACKUP_DIR=/var/opt/mssql/backups
+      - MSSQL_LCID=1033 # English
+      - TZ=Etc/UTC # https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-configure-time-zone
+    ports:
+      - 14330:1433
+    volumes:
+      # You can't map to the root of the container, so we map to the subdirectories
+      - ./data/backups:/var/opt/mssql/backups
+      - ./data/data:/var/opt/mssql/data
+      - ./data/log:/var/opt/mssql/log # uncomment if you want to map the error log directory
+
+networks:
+  default:
+    name: scratch-mssql-net

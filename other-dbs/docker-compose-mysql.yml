@@ -1,0 +1,18 @@
+name: scratch-mysql
+
+services:
+  mysql:
+    image: mysql:8.3.0
+    restart: no
+    hostname: scratch-mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - TZ=Etc/UTC
+    ports:
+      - 33060:3306
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+
+networks:
+  default:
+    name: scratch-mysql-net

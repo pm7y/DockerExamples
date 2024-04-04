@@ -1,0 +1,21 @@
+name: scratch-redis
+
+services:
+  redis:
+    image: redis:7.2.4-alpine3.19
+    restart: no
+    hostname: scratch-redis
+    shm_size: 1gb
+    environment:
+      - REDIS_PASSWORD=${DB_PASSWORD}
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=16
+      - TZ=Etc/UTC
+    ports:
+      - "63790:6379"
+    volumes:
+      - ./data/redis:/data
+
+networks:
+  default:
+    name: scratch-redis-net

@@ -1,0 +1,16 @@
+services:
+  mssql:
+    command: >
+      /bin/bash -c "
+      /opt/mssql/bin/sqlservr &
+
+      until /opt/mssql-tools/bin/sqlcmd -l 1 -S scratch-mssql -U sa -P '${DB_PASSWORD}' -Q 'SELECT 1' &> /dev/null; do
+        >&2 echo '>>>>>>>>>> SQL Server is unavailable - sleeping <<<<<<<<<<';
+        sleep 5;
+      done;
+      echo '>>>>>>>>>> SQL Server is ready - executing init script <<<<<<<<<<';
+      /opt/mssql-tools/bin/sqlcmd -l 5 -S scratch-mssql -U sa -P '${DB_PASSWORD}' -d master -i /tmp/mssql-init.sql;
+
+      sleep infinity;"
+    volumes:
+      - ./mssql-init.sql:/tmp/mssql-init.sql

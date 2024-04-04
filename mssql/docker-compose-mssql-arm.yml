@@ -1,0 +1,4 @@
+services:
+  mssql:
+    # https://hub.docker.com/_/microsoft-azure-sql-edge
+    image: mcr.microsoft.com/azure-sql-edge:1.0.7

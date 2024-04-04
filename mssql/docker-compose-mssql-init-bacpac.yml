@@ -1,0 +1,25 @@
+services:
+  mssql-bacpac:
+    # https://hub.docker.com/_/microsoft-dotnet-sdk/
+    image: mcr.microsoft.com/dotnet/sdk:8.0.203-jammy
+    restart: no
+    command: >
+      /bin/bash -c "
+      echo 'Installing sqlpackage tool...';
+      export PATH=/root/.dotnet/tools:/usr/share/dotnet:/usr/bin;
+      dotnet tool update microsoft.sqlpackage --global --verbosity minimal;
+
+      echo 'Importing bacpac...';
+      sqlpackage /Action:Import
+      /TargetDatabaseName:WideWorldImporters
+      /TargetServerName:scratch-mssql
+      /TargetUser:sa
+      /TargetPassword:'${DB_PASSWORD}'
+      /SourceFile:/tmp/WideWorldImporters-Standard.bacpac
+      /TargetTrustServerCertificate:true
+      /TargetTimeout:60;"
+    depends_on:
+      - mssql
+    volumes:
+      # https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v1.0
+      - ./WideWorldImporters-Standard.bacpac:/tmp/WideWorldImporters-Standard.bacpac
