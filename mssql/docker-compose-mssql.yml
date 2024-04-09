@@ -14,6 +14,12 @@ services:
       - MSSQL_BACKUP_DIR=/var/opt/mssql/backups
       - MSSQL_LCID=1033 # English
       - TZ=Etc/UTC # https://learn.microsoft.com/en-us/sql/linux/sql-server-linux-configure-time-zone
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S scratch-mssql -U sa -P '${DB_PASSWORD}' -Q "SELECT 1" -b -o /dev/null
+      interval: 10s
+      timeout: 1s
+      retries: 3
+      start_period: 30s
     ports:
       - 14330:1433
     volumes:

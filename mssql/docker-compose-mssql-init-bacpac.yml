@@ -17,9 +17,10 @@ services:
       /TargetPassword:'${DB_PASSWORD}'
       /SourceFile:/tmp/WideWorldImporters-Standard.bacpac
       /TargetTrustServerCertificate:true
-      /TargetTimeout:60;"
+      /TargetTimeout:5;"
     depends_on:
-      - mssql
+      mssql:
+        condition: service_healthy
     volumes:
       # https://github.com/Microsoft/sql-server-samples/releases/tag/wide-world-importers-v1.0
       - ./WideWorldImporters-Standard.bacpac:/tmp/WideWorldImporters-Standard.bacpac

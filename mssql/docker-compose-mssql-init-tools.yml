@@ -3,8 +3,9 @@ services:
     # https://hub.docker.com/_/microsoft-mssql-tools
     image: mcr.microsoft.com/mssql-tools:latest
     restart: no
-    command: "/opt/mssql-tools/bin/sqlcmd -S scratch-mssql -l 60 -U sa -P '${DB_PASSWORD}' -d master -i /tmp/mssql-init.sql"
+    command: "/opt/mssql-tools/bin/sqlcmd -S scratch-mssql -l 5 -U sa -P '${DB_PASSWORD}' -d master -i /tmp/mssql-init.sql"
     depends_on:
-      - mssql
+      mssql:
+        condition: service_healthy
     volumes:
       - ./mssql-init.sql:/tmp/mssql-init.sql
