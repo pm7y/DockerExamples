@@ -3,7 +3,7 @@ name: sonarqube
 services:
   db:
     # https://hub.docker.com/_/postgres
-    image: postgres:16.2-alpine3.19
+    image: postgres:15.7-alpine3.19
     restart: no
     hostname: sonarqube-db
     environment:
@@ -22,7 +22,7 @@ services:
 
   sonarqube:
     # https://hub.docker.com/_/sonarqube
-    image: sonarqube:10.4.1-community
+    image: sonarqube:10.5.1-community
     restart: no
     hostname: sonarqube
     depends_on:
