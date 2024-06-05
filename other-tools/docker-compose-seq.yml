@@ -1,0 +1,27 @@
+name: scratch-seq
+
+services:
+  seq:
+    # https://hub.docker.com/r/datalust/seq
+    # https://docs.datalust.co/docs/getting-started-with-docker
+    image: datalust/seq:2024.3
+    restart: no
+    hostname: scratch-seq
+    environment:
+      - ACCEPT_EULA=Y
+      - HOST_PATH_TO_SEQ:/data
+      # - HOST_HTTP_PORT=8080
+      # - HOST_INGESTION_PORT=5341
+      # - SEQ_API_INGESTIONPORT=5341
+      # - SEQ_FIRSTRUN_ADMINUSERNAME=admin
+      # - SEQ_FIRSTRUN_ADMINPASSWORD=admin
+      # - SEQ_FIRSTRUN_ADMINPASSWORDHASH=<hash> # from docker run datalust/seq config hash
+      - TZ=Etc/UTC
+    ports:
+      - "7341:80"
+    volumes:
+      - ./data/seq:/data
+
+networks:
+  default:
+    name: scratch-seq-net
