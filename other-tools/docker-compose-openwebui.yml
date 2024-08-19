@@ -1,0 +1,54 @@
+name: model-chat
+
+# docker compose -f .\docker-compose.yml up -d
+# docker compose -f .\docker-compose.yml down
+
+services:
+  webui:
+    image: ghcr.io/open-webui/open-webui:cuda # 'cuda' for nvidia support otherwise use 'main'
+    restart: no
+    depends_on:
+      ollama:
+        condition: service_healthy
+    environment:
+      - WEBUI_AUTH=false
+      - WEBUI_URL=http://localhost:8100
+      - OLLAMA_BASE_URLS=http://ollama:11434;
+      - USE_CUDA_DOCKER=true
+      - ENV=prod
+    ports:
+      - 8100:8080
+    volumes:
+      - ./data/webui:/app/backend/data
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+
+  # ollama:
+  #   # https://hub.docker.com/r/ollama/ollama
+  #   image: ollama/ollama
+  #   restart: no
+  #   ports:
+  #     - 8101:11434
+  #   volumes:
+  #     - ./data/ollama:/root/.ollama
+  #   healthcheck:
+  #     test: ollama --version || exit 1
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 3
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - driver: nvidia
+  #             count: all
+  #             capabilities: [gpu]
+
+networks:
+  default:
+    name: model-chat
