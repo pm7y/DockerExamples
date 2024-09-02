@@ -2,3 +2,4 @@ data
 .env
 .DS_Store
 sonarqube/.sonarqube
+other-tools/.env.librechat
