@@ -1,0 +1,21 @@
+name: n8n
+
+services:
+  n8n:
+    # https://hub.docker.com/r/n8nio/n8n
+    image: docker.n8n.io/n8nio/n8n:latest
+    restart: no
+    hostname: n8n
+    # user: root
+    environment:
+      - GENERIC_TIMEZONE=Australia/Brisbane
+      - TZ=Australia/Brisbane
+    command: ["start", "--tunnel"]
+    ports:
+      - "5678:5678"
+    volumes:
+      - /data/n8n:/data/n8n
+
+networks:
+  default:
+    name: n8n-net
