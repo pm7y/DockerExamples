@@ -1,5 +1,7 @@
 name: scratch-mssql
 
+# podman compose --file docker-compose-mssql.yml up --detach
+
 services:
   mssql:
     # https://hub.docker.com/_/microsoft-mssql-server
