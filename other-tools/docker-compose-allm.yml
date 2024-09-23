@@ -1,0 +1,21 @@
+# podman compose --file docker-compose-allm.yml up --detach
+# podman compose --file docker-compose-allm.yml down
+
+services:
+  anythingllm:
+    image: mintplexlabs/anythingllm
+    container_name: anythingllm
+    ports:
+      - 30001:3001
+    cap_add:
+      - SYS_ADMIN
+    environment:
+      # Adjust for your environment
+      - STORAGE_DIR=/app/server/storage
+      - DISABLE_TELEMETRY=true
+      - JWT_SECRET="${PASSWORD:Pa$$w0rd!}"
+      - VECTOR_DB=lancedb
+    volumes:
+      - ./data/allm:/app/server/storage
+      - ./data/allm/.env:/app/server/.env
+    restart: no
