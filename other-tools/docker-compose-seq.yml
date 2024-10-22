@@ -1,5 +1,8 @@
 name: scratch-seq
 
+# podman compose --file docker-compose-seq.yml up --detach
+# podman compose --file docker-compose-seq.yml down
+
 services:
   seq:
     # https://hub.docker.com/r/datalust/seq

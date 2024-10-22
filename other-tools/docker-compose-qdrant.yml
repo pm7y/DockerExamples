@@ -1,0 +1,26 @@
+name: scratch-qdrant
+
+# podman compose --file docker-compose-qdrant.yml up --detach
+
+services:
+  qdrant:
+    image: qdrant/qdrant:latest
+    restart: no
+    hostname: scratch-qdrant
+    container_name: scratch-qdrant
+    ports:
+      - 6333:6333
+      - 6334:6334
+    # expose:
+    #   - 6333
+    #   - 6334
+    environment:
+      - QDRANT__SERVICE__HTTP_PORT=6333
+      - QDRANT__SERVICE__GRPC_PORT=6334
+      - QDRANT__SERVICE__ENABLE_TLS=false
+      - QDRANT__STORAGE__STORAGE_PATH=/qdrant/storage
+      - QDRANT__STORAGE__SNAPSHOTS_PATH=/qdrant/snapshots
+      - QDRANT__STORAGE__TEMP_PATH=/qdrant/tmp
+    #   - QDRANT__SERVICE__API_KEY=Pa$$w0rd!
+    volumes:
+      - ./data/qdrant/storage:/qdrant/storage
