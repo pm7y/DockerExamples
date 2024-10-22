@@ -1,6 +1,7 @@
 name: scratch-qdrant
 
 # podman compose --file docker-compose-qdrant.yml up --detach
+# podman compose --file docker-compose-qdrant.yml down
 
 services:
   qdrant:
