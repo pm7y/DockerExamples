@@ -1,0 +1,26 @@
+## .NET
+bin/
+obj/
+*.user
+*.userosscache
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+## Visual Studio
+.vs/
+*.csproj.user
+
+## JetBrains Rider
+.idea/
+*.sln.iml
+
+## Test Results
+TestResults/
+*.trx
+
+## NuGet
+packages/
+*.nupkg
